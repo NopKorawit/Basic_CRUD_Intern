@@ -1,0 +1,91 @@
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <table [cellPadding]="4" class="table2 modal-table">
+          <tbody>
+            <tr>
+              <td>ชื่อ-สกุล</td>
+              <td>
+                <input class="me-3" id="firstName" type="text" />
+                <input id="lastName" type="text" />
+              </td>
+            </tr>
+            <tr>
+              <td>วันเกิด</td>
+              <td>
+                <div class="input-group mx-auto">
+                  <input
+                    id="dateOfBirth"
+                    class="form-control"
+                    name="dp"
+                    ngbDatepicker
+                    #dp="ngbDatepicker"
+                  />
+                  <button
+                    class="btn btn-outline-secondary calendar"
+                    (click)="dp.toggle()"
+                    type="button"
+                  ></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>อายุ</td>
+              <td>ปี</td>
+            </tr>
+            <tr>
+              <td>ที่อยู่</td>
+              <td><textarea name="" id="" cols="50" rows="4"></textarea></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.close('Save click')"
+    >
+      ปิด
+    </button>
+  </div>
+</ng-template>
+
+<div class="list-container mx-auto">
+  <div class="text-end mb-3">
+    <button class="btn btn-primary" (click)="open(content)">ADD</button>
+  </div>
+  <table class="table table-list text-center">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">ชื่อ-สกุล</th>
+        <th scope="col">ที่อยู่</th>
+        <th scope="col">วันเกิด</th>
+        <th scope="col">อายุ</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let customer of customers">
+        <td scope="row" class="text-end">{{ customer.id }}</td>
+        <td scope="row">{{ customer.firstName }} {{ customer.lastName }}</td>
+        <td scope="row">{{ customer.address }}</td>
+        <td scope="row">{{ getDateString(customer.dateOfBirth) }}</td>
+        <td scope="row">{{ calculateAge(customer.dateOfBirth) }}</td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="open(content, getCustomer(customer.id))"
+          >
+            View
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
