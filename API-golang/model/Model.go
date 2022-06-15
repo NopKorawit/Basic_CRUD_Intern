@@ -9,3 +9,11 @@ type CustomerModel struct {
 	Address   string `db:"Address" json:"address"`
 	Birthday  int    `db:"Birthday" json:"birthday"`
 }
+
+type RoomModel struct {
+	Id               int
+	ReserveDate      NullTime
+	ReserveStartTime NullTime
+	ReserveEndTime   NullTime
+	RoomNo           string
+}
