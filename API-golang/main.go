@@ -26,11 +26,11 @@ func main() {
 
 		rb := controller.NewBookController()
 
-		r := v1.Group("/Room")
+		r := v1.Group("/room")
 
 		{
 			r.GET("/id", rb.ReadRoom)
-			// r.GET("", rb.ReadAllCustomer)
+			r.GET("", rb.ReadAllRoom)
 			// r.POST("", rb.CreateCustomer)
 			// r.PUT("", rb.UpdateCustomer)
 			// r.DELETE(":Id", rb.DeleteCustomer)

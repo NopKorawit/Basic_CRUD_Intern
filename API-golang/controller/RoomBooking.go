@@ -19,7 +19,21 @@ func (r *RoomController) ReadRoom(ctx *gin.Context) {
 	id := ctx.Query("id")
 	RoomConfig := repository.RoomRepository{}
 
-	if result, err := RoomConfig.ReadCustomer(id); err != nil {
+	if result, err := RoomConfig.ReadRoom(id); err != nil {
+		handler.NewError(ctx, http.StatusNotFound, err)
+		return
+	} else {
+		ctx.JSON(http.StatusOK, model.Controller{
+			Message: "successful",
+			Data:    result,
+		})
+	}
+}
+
+func (r *RoomController) ReadAllRoom(ctx *gin.Context) {
+	RoomConfig := repository.RoomRepository{}
+
+	if result, err := RoomConfig.ReadAllRoom(); err != nil {
 		handler.NewError(ctx, http.StatusNotFound, err)
 		return
 	} else {
