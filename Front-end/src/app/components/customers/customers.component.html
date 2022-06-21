@@ -45,13 +45,17 @@
           <tr>
             <td>อายุ</td>
             <td>
-              <span *ngIf="age && age.valid">{{ age }} ปี</span>
+              <span>
+                <!-- {{ age }} -->
+                ปี</span
+              >
             </td>
           </tr>
           <tr>
             <td>ที่อยู่</td>
             <td>
               <textarea
+                id="address"
                 class="form-control"
                 cols="50"
                 rows="4"
@@ -98,7 +102,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let customer of customers">
+      <tr *ngFor="let customer of customerList">
         <td scope="row" class="text-end">{{ customer.id }}</td>
         <td scope="row">{{ customer.firstName }} {{ customer.lastName }}</td>
         <td scope="row">{{ customer.address }}</td>

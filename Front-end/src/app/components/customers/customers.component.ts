@@ -3,7 +3,7 @@ import { Customer } from 'src/app/models/customer';
 import { CUSTOMERS } from 'src/app/data/mock-customer';
 import { map, Observable, startWith } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateAdapter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerService } from '../../service/customer.service';
 
 @Component({
@@ -16,16 +16,24 @@ export class CustomersComponent implements OnInit {
   errorMessage = '';
   errorClass = '';
 
-  getDateString(dateOfBirth: number) {
+  getDateString(dateOfBirth: Date) {
     const result = new Date(dateOfBirth).toLocaleDateString('th');
     return result;
   }
 
-  calculateAge(dateOfBirth: number) {
-    const timeDiff = Math.abs(Date.now() - dateOfBirth);
+  calculateAge(dateOfBirth: Date) {
+    const dob = dateOfBirth.getTime();
+    const now = Date.now();
+    const timeDiff = Math.abs(now - dob);
     const result = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
 
     return result;
+  }
+  customerList: any;
+  getCustomers() {
+    this.service.getCustomer().subscribe((result) => {
+      this.customerList = result;
+    });
   }
   getCustomer(id: number) {
     const result: Customer = this.customers[id];
@@ -34,7 +42,8 @@ export class CustomersComponent implements OnInit {
   closeResult = '';
   constructor(
     private modalService: NgbModal,
-    private service: CustomerService
+    private service: CustomerService,
+    private dateAdapter: NgbDateAdapter<string>
   ) {}
   open(content: any, customer?: Customer) {
     if (customer) {
@@ -51,16 +60,18 @@ export class CustomersComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getCustomers();
+  }
   customerForm = new FormGroup({
-    id: new FormControl({ value: 0 }),
+    id: new FormControl({ value: 1 }),
     firstName: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(5)])
+      Validators.compose([Validators.required, Validators.minLength(4)])
     ),
     lastName: new FormControl(
       '',
-      Validators.compose([Validators.required, Validators.minLength(5)])
+      Validators.compose([Validators.required, Validators.minLength(4)])
     ),
     dateOfBirth: new FormControl('', Validators.required),
     address: new FormControl('', Validators.required),
@@ -68,6 +79,13 @@ export class CustomersComponent implements OnInit {
   });
   saveResponse: any;
   saveCustomer() {
+    console.log(this.customerForm.getRawValue());
+    // console.log(
+    //   'Age :' +
+    //     this.calculateAge(this.customerForm.getRawValue().dateOfBirth) +
+    //     'ปี'
+    // );
+
     if (this.customerForm.valid) {
       this.service
         .createCustomer(this.customerForm.getRawValue())
@@ -82,9 +100,10 @@ export class CustomersComponent implements OnInit {
         });
     }
   }
-  get age() {
-    return this.customerForm.get('dateOfBirth');
-  }
+
+  // get age() {
+  //   return this.calculateAge(this.customerForm.getRawValue().dateOfBirth);
+  // }
   loadEditData(id: any) {
     console.log(id);
   }
