@@ -17,17 +17,7 @@ func NewCustomerController() *CustomerController {
 }
 
 func (c *CustomerController) ReadCustomer(ctx *gin.Context) {
-	// ctx.Request.URL.Query()
-	// Id := ctx.Param("id")
-	// if Id == "undefined" {
-	// 	Id = ""
-	// }
 	id := ctx.Query("id")
-	// firstname := ctx.Query("firstname")
-	// lastname := ctx.Query("lastname")
-	// address := ctx.Query("address")
-	// Birthday := ctx.Query("birthday")
-	// firstname,lastname,address,Birthday
 	CustomerConfig := repository.CustomerRepository{}
 
 	if result, err := CustomerConfig.ReadCustomer(id); err != nil {
@@ -40,10 +30,6 @@ func (c *CustomerController) ReadCustomer(ctx *gin.Context) {
 		})
 	}
 }
-
-// func (c *CustomerController) ReadCustomer(ctx *gin.Context){
-
-// }
 
 func (c *CustomerController) ReadAllCustomer(ctx *gin.Context) {
 	CustomerConfig := repository.CustomerRepository{}
@@ -58,27 +44,6 @@ func (c *CustomerController) ReadAllCustomer(ctx *gin.Context) {
 		})
 	}
 }
-
-// func (c *CustomerController) ReadAllCustomer(ctx *gin.Context) {
-// 	Id := ctx.Param("Id")
-// 	if Id == "undefined" {
-// 		Id = ""
-// 	}
-// 	CustomerConfig := repository.CustomerRepository{}
-
-// 	if result, err := CustomerConfig.ReadAllCustomer(); err != nil {
-// 		handler.NewError(ctx, http.StatusNotFound, err)
-// 		return
-// 	} else if result, err := CustomerConfig.ReadCustomer(Id); err != nil {
-// 		handler.NewError(ctx, http.StatusNotFound, err)
-// 		return
-// 	} else {
-// 		ctx.JSON(http.StatusOK, model.Controller{
-// 			Message: "successful",
-// 			Data:    result,
-// 		})
-// 	}
-// }
 
 func (c *CustomerController) CreateCustomer(ctx *gin.Context) {
 	var CustomerData model.CustomerModel

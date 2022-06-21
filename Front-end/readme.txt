@@ -1,1 +1,2 @@
-asdasd
+npm install
+ng serve
