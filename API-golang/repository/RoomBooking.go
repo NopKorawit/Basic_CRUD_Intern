@@ -59,6 +59,7 @@ func (r *RoomRepository) BookingRoom(d model.RoomModel) error {
 		return err
 	}
 	defer handler.Close_DB(db)
+	// execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s', @ReserveDate = N'%v', @ReserveStartTime = N'%v',@ReserveEndTime =N'%v',@RoomNo =N'%s'", "CREATE", d.ReserveDate, d.ReserveStartTime, d.ReserveEndTime, d.RoomNo)
 	execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s', @ReserveDate = N'%v', @ReserveStartTime = N'%v',@ReserveEndTime =N'%v',@RoomNo =N'%s'", "CREATE", d.ReserveDate.Format("2006-01-02"), d.ReserveStartTime.Format("15:04:05"), d.ReserveEndTime.Format("15:04:05"), d.RoomNo)
 	_, err = db.Exec(execStr)
 	if err != nil {

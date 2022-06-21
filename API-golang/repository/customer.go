@@ -59,7 +59,7 @@ func (r *CustomerRepository) CreateCustomer(data model.CustomerModel) error {
 		return err
 	}
 	defer handler.Close_DB(db)
-	execStr := fmt.Sprintf("exec SP_CustomerManagement @Process = N'%s', @FirstName = N'%s', @LastName = N'%s' , @Address = N'%s' , @Birthday = N'%d'", "CREATE", data.FirstName, data.LastName, data.Address, data.Birthday)
+	execStr := fmt.Sprintf("exec SP_CustomerManagement @Process = N'%s', @FirstName = N'%s', @LastName = N'%s' , @Address = N'%s' , @Birthday = N'%v'", "CREATE", data.FirstName, data.LastName, data.Address, data.Birthday.Format("2006-01-02"))
 	_, err = db.Exec(execStr)
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (r *CustomerRepository) UpdateCustomer(data model.CustomerModel) error {
 		return err
 	}
 	defer handler.Close_DB(db)
-	execStr := fmt.Sprintf("exec SP_CustomerManagement @Process = N'%s', @FirstName = N'%s', @LastName = N'%s' , @Address = N'%s' , @Birthday = N'%d', @Id = '%d'", "UPDATE", data.FirstName, data.LastName, data.Address, data.Birthday, data.Id)
+	execStr := fmt.Sprintf("exec SP_CustomerManagement @Process = N'%s', @FirstName = N'%s', @LastName = N'%s' , @Address = N'%s' , @Birthday = N'%v', @Id = '%v'", "UPDATE", data.FirstName, data.LastName, data.Address, data.Birthday.Format("2006-01-02"), data.Id)
 	_, err = db.Exec(execStr)
 	if err != nil {
 		return err
