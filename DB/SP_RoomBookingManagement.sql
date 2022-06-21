@@ -16,18 +16,19 @@ CREATE PROCEDURE [dbo].[SP_RoomBookingManagement]
 	@ReserveEndTime time = NULL,
 	@RoomNo varchar (10) = NULL
 AS
+
 BEGIN
 	IF @Process = 'CREATE' 
 		BEGIN
 			INSERT INTO TB_RoomBooking(ReserveDate, ReserveStartTime,ReserveEndTime,RoomNo)
-			VALUES (@ReserveDate, @ReserveStartTime,@ReserveEndTime,@RoomNo)
+			VALUES (CONVERT(date,@ReserveDate), CONVERT(time,@ReserveStartTime),CONVERT(time,@ReserveEndTime),@RoomNo)
 		END
 	ELSE IF @Process = 'UPDATE'
 		BEGIN
 			UPDATE TB_RoomBooking
-			SET ReserveDate = @ReserveDate,
-				ReserveStartTime = @ReserveStartTime,
-				ReserveEndTime = @ReserveEndTime,
+			SET ReserveDate = CONVERT(date,@ReserveDate),
+				ReserveStartTime = CONVERT(time,@ReserveStartTime),
+				ReserveEndTime = CONVERT(time,@ReserveEndTime),
 				RoomNo = @RoomNo
 			WHERE Id = @Id
 		END
@@ -59,6 +60,7 @@ BEGIN
 			WHERE Delflag = 0
 		END
 END
+
 GO
 
 

@@ -43,3 +43,23 @@ func (r *RoomController) ReadAllRoom(ctx *gin.Context) {
 		})
 	}
 }
+
+func (r *RoomController) BookingRoom(ctx *gin.Context) {
+	var RoomData model.RoomModel
+	if err := ctx.ShouldBindJSON(&RoomData); err != nil {
+		handler.NewError(ctx, http.StatusBadRequest, err)
+		return
+	}
+	RoomConfig := repository.RoomRepository{}
+
+	if err := RoomConfig.BookingRoom(RoomData); err != nil {
+		handler.NewError(ctx, http.StatusBadRequest, err)
+		return
+	} else {
+		ctx.JSON(http.StatusOK, model.Controller{
+			Message: "successful",
+			Data:    nil,
+		})
+	}
+
+}

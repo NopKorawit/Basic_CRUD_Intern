@@ -52,3 +52,17 @@ func (r *RoomRepository) ReadAllRoom() ([]model.RoomModel, error) {
 	}
 	return returnRooms, nil
 }
+
+func (r *RoomRepository) BookingRoom(d model.RoomModel) error {
+	db, err := handler.Init_DB()
+	if err != nil {
+		return err
+	}
+	defer handler.Close_DB(db)
+	execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s', @ReserveDate = N'%v', @ReserveStartTime = N'%v',@ReserveEndTime =N'%v',@RoomNo =N'%s'", "CREATE", d.ReserveDate.Format("2006-01-02"), d.ReserveStartTime.Format("15:04:05"), d.ReserveEndTime.Format("15:04:05"), d.RoomNo)
+	_, err = db.Exec(execStr)
+	if err != nil {
+		return err
+	}
+	return nil
+}

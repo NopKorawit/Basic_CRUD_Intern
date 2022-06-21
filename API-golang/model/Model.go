@@ -1,5 +1,7 @@
 package model
 
+import "time"
+
 //model customer
 
 type CustomerModel struct {
@@ -10,10 +12,18 @@ type CustomerModel struct {
 	Birthday  int    `db:"Birthday" json:"birthday"`
 }
 
+// type RoomModel_Null struct {
+// 	Id               int
+// 	ReserveDate      NullTime
+// 	ReserveStartTime NullTime
+// 	ReserveEndTime   NullTime
+// 	RoomNo           string
+// }
+
 type RoomModel struct {
 	Id               int
-	ReserveDate      NullTime
-	ReserveStartTime NullTime
-	ReserveEndTime   NullTime
+	ReserveDate      time.Time
+	ReserveStartTime time.Time
+	ReserveEndTime   time.Time
 	RoomNo           string
 }

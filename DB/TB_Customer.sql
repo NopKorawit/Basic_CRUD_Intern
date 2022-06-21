@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[TB_Customer](
 	[FirstName] [nvarchar](80) NULL,
 	[LastName] [nvarchar](80) NULL,
 	[Address] [nvarchar](160) NULL,
-	[Birthday] [int] NULL,
+	[Birthday] [date] NULL,
 	[Delflag] [int] NULL,
  CONSTRAINT [Id] PRIMARY KEY CLUSTERED 
 (
