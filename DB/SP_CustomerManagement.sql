@@ -20,7 +20,7 @@ BEGIN
 	IF @Process = 'CREATE' 
 		BEGIN
 			INSERT INTO TB_Customer(FirstName,LastName, Address, Birthday)
-			VALUES (@FirstName,@LastName, @Address, @Birthday)
+			VALUES (@FirstName,@LastName, @Address, CONVERT(date,@Birthday))
 		END
 
 	ELSE IF @Process = 'UPDATE'
@@ -29,7 +29,7 @@ BEGIN
 			SET FirstName = @FirstName,
 				LastName = @LastName,
 				Address = @Address,
-				Birthday = @Birthday
+				Birthday = CONVERT(date,@Birthday)
 			WHERE Id = @Id
 		END
 

@@ -31,7 +31,7 @@ func main() {
 		{
 			r.GET("/id", rb.ReadRoom)
 			r.GET("", rb.ReadAllRoom)
-			// r.POST("", rb.CreateCustomer)
+			r.POST("", rb.BookingRoom)
 			// r.PUT("", rb.UpdateCustomer)
 			// r.DELETE(":Id", rb.DeleteCustomer)
 		}
