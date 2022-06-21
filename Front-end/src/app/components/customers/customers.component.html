@@ -1,57 +1,85 @@
 <ng-template #content let-modal>
-  <div class="modal-body">
-    <form>
-      <div class="mb-3">
-        <table [cellPadding]="4" class="table2 modal-table">
-          <tbody>
-            <tr>
-              <td>ชื่อ-สกุล</td>
-              <td>
-                <input class="me-3" id="firstName" type="text" />
-                <input id="lastName" type="text" />
-              </td>
-            </tr>
-            <tr>
-              <td>วันเกิด</td>
-              <td>
-                <div class="input-group mx-auto">
-                  <input
-                    id="dateOfBirth"
-                    class="form-control"
-                    name="dp"
-                    ngbDatepicker
-                    #dp="ngbDatepicker"
-                  />
-                  <button
-                    class="btn btn-outline-secondary calendar"
-                    (click)="dp.toggle()"
-                    type="button"
-                  ></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>อายุ</td>
-              <td>ปี</td>
-            </tr>
-            <tr>
-              <td>ที่อยู่</td>
-              <td><textarea name="" id="" cols="50" rows="4"></textarea></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.close('Save click')"
-    >
-      ปิด
-    </button>
-  </div>
+  <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()">
+    <div class="mb-3 modal-body">
+      <table [cellPadding]="4" class="table2 modal-table">
+        <tbody>
+          <tr>
+            <td>ชื่อ-สกุล</td>
+            <td>
+              <div class="input-group">
+                <input
+                  class="me-3 form-control"
+                  id="firstName"
+                  type="text"
+                  formControlName="firstName"
+                />
+                <input
+                  class="form-control"
+                  id="lastName"
+                  type="text"
+                  formControlName="lastName"
+                />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>วันเกิด</td>
+            <td>
+              <div class="input-group mx-auto">
+                <input
+                  id="dateOfBirth"
+                  class="form-control"
+                  name="dp"
+                  ngbDatepicker
+                  #dp="ngbDatepicker"
+                  formControlName="dateOfBirth"
+                />
+                <button
+                  class="btn btn-outline-secondary calendar"
+                  (click)="dp.toggle()"
+                  type="button"
+                ></button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>อายุ</td>
+            <td>
+              <span *ngIf="age && age.valid">{{ age }} ปี</span>
+            </td>
+          </tr>
+          <tr>
+            <td>ที่อยู่</td>
+            <td>
+              <textarea
+                class="form-control"
+                cols="50"
+                rows="4"
+                formControlName="address"
+              ></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        [disabled]="customerForm.invalid"
+        type="submit"
+        class="btn btn-primary"
+      >
+        บันทึก
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        (click)="modal.close('Save click')"
+      >
+        ปิด
+      </button>
+    </div>
+  </form>
 </ng-template>
 
 <div class="list-container mx-auto">
@@ -80,7 +108,7 @@
           <button
             type="button"
             class="btn btn-primary"
-            (click)="open(content, getCustomer(customer.id))"
+            (click)="open(content, getCustomer(customer.id - 1))"
           >
             View
           </button>

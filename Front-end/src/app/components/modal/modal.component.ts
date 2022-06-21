@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-modal',
@@ -7,6 +8,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ModalComponent implements OnInit {
   closeResult = '';
+
   constructor(private modalService: NgbModal) {}
   open(content: any) {
     this.modalService
@@ -29,5 +31,18 @@ export class ModalComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
+  @ViewChild('content') addView!: ElementRef;
   ngOnInit(): void {}
+  customerForm = new FormGroup({
+    id: new FormControl(),
+    firstName: new FormControl(),
+    lastName: new FormControl(),
+    dateOfBirth: new FormControl(),
+    address: new FormControl(),
+    // age: new FormControl(),
+  });
+
+  saveCustomer() {
+    console.log(this.customerForm.value);
+  }
 }

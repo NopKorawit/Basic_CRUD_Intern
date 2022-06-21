@@ -9,12 +9,22 @@
     ></button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()">
       <div class="mb-3">
         <div class="input-group mx-auto my-4">
           <label class="pe-3">ชื่อ-สกุล</label>
-          <input class="me-3" id="firstName" type="text" />
-          <input id="lastName" type="text" />
+          <input
+            class="me-3 form-control"
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+          />
+          <input
+            class="form-control"
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+          />
         </div>
 
         <div class="input-group mx-auto">
@@ -24,6 +34,7 @@
             class="form-control"
             placeholder="yyyy-mm-dd"
             name="dp"
+            formControlName="dateOfBirth"
             ngbDatepicker
             #dp="ngbDatepicker"
           />
@@ -35,26 +46,27 @@
         </div>
         <div class="input-group">
           <label for="age" class="pe-3">อายุ</label>
-          <div class="">13 ปี</div>
+          <div>13 ปี</div>
         </div>
         <div class="input-group">
           <label for="address" class="pe-3">ที่อยู่</label>
-          <textarea rows="4" cols="50"></textarea>
+          <textarea
+            rows="4"
+            cols="50"
+            class="form-control"
+            formControlName="address"
+          ></textarea>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="modal.close('Save click')"
-    >
+    <button type="button" class="btn btn-outline-dark" (click)="saveCustomer()">
       Save
     </button>
   </div>
 </ng-template>
 
-<!-- <button class="btn btn-lg btn-outline-primary" (click)="open(customer)">
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">
   Launch demo modal
-</button> -->
+</button>

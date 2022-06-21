@@ -1,11 +1,10 @@
 import { Component, OnInit, PipeTransform } from '@angular/core';
-
 import { Customer } from 'src/app/models/customer';
 import { CUSTOMERS } from 'src/app/data/mock-customer';
 import { map, Observable, startWith } from 'rxjs';
-import { FormControl } from '@angular/forms';
-
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CustomerService } from '../../service/customer.service';
 
 @Component({
   selector: 'app-customers',
@@ -14,6 +13,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class CustomersComponent implements OnInit {
   customers = CUSTOMERS;
+  errorMessage = '';
+  errorClass = '';
 
   getDateString(dateOfBirth: number) {
     const result = new Date(dateOfBirth).toLocaleDateString('th');
@@ -31,27 +32,63 @@ export class CustomersComponent implements OnInit {
     return result;
   }
   closeResult = '';
-  constructor(private modalService: NgbModal) {}
+  constructor(
+    private modalService: NgbModal,
+    private service: CustomerService
+  ) {}
   open(content: any, customer?: Customer) {
+    if (customer) {
+      console.log(customer.id);
+    }
     this.modalService
-      .open(content, { ariaLabelledBy: 'modal-basic-title', centered: true })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+      .open(content, {
+        ariaLabelledBy: 'modal-basic-title',
+        centered: true,
+        animation: true,
+      })
+      .result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      });
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
+
+  ngOnInit(): void {}
+  customerForm = new FormGroup({
+    id: new FormControl({ value: 0 }),
+    firstName: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(5)])
+    ),
+    lastName: new FormControl(
+      '',
+      Validators.compose([Validators.required, Validators.minLength(5)])
+    ),
+    dateOfBirth: new FormControl('', Validators.required),
+    address: new FormControl('', Validators.required),
+    //  age: new FormControl()
+  });
+  saveResponse: any;
+  saveCustomer() {
+    if (this.customerForm.valid) {
+      this.service
+        .createCustomer(this.customerForm.getRawValue())
+        .subscribe((result) => {
+          this.saveResponse = result;
+          if (this.saveResponse.result == 'pass') {
+            this.errorMessage = 'Saved';
+            this.errorClass = 'success';
+          } else {
+            this.errorMessage = 'Failed to save';
+          }
+        });
     }
   }
-  ngOnInit(): void {}
+  get age() {
+    return this.customerForm.get('dateOfBirth');
+  }
+  loadEditData(id: any) {
+    console.log(id);
+  }
+  functionEdit(id: any) {
+    this.loadEditData(id);
+  }
 }
