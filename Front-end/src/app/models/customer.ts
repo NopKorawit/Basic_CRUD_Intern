@@ -2,7 +2,7 @@ export interface Customer {
   id: number;
   firstName: string;
   lastName: string;
-  dateOfBirth: number;
+  dateOfBirth?: Date;
   address: string;
   delFlag: boolean;
   age?: number;
