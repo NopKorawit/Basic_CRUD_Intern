@@ -21,7 +21,7 @@ func main() {
 			c.GET("", nc.ReadAllCustomer)
 			c.POST("", nc.CreateCustomer)
 			c.PUT("", nc.UpdateCustomer)
-			c.DELETE(":Id", nc.DeleteCustomer)
+			c.DELETE(":id", nc.DeleteCustomer)
 		}
 
 		rb := controller.NewBookController()
@@ -32,8 +32,8 @@ func main() {
 			r.GET("/id", rb.ReadRoom)
 			r.GET("", rb.ReadAllRoom)
 			r.POST("", rb.BookingRoom)
-			// r.PUT("", rb.UpdateCustomer)
-			// r.DELETE(":Id", rb.DeleteCustomer)
+			r.PUT("", rb.UpdateRoom)
+			r.DELETE(":id", rb.CancleBook)
 		}
 	}
 

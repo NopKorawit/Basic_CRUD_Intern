@@ -67,3 +67,33 @@ func (r *RoomRepository) BookingRoom(d model.RoomModel) error {
 	}
 	return nil
 }
+
+func (r *RoomRepository) UpdateRoom(d model.RoomModel) error {
+	db, err := handler.Init_DB()
+	if err != nil {
+		return err
+	}
+	defer handler.Close_DB(db)
+	// execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s', @ReserveDate = N'%v', @ReserveStartTime = N'%v',@ReserveEndTime =N'%v',@RoomNo =N'%s'", "CREATE", d.ReserveDate, d.ReserveStartTime, d.ReserveEndTime, d.RoomNo)
+	execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s', @ReserveDate = N'%v', @ReserveStartTime = N'%v',@ReserveEndTime =N'%v',@RoomNo =N'%s',@id=N'%v'", "UPDATE", d.ReserveDate.Format("2006-01-02"), d.ReserveStartTime.Format("15:04:05"), d.ReserveEndTime.Format("15:04:05"), d.RoomNo, d.Id)
+	_, err = db.Exec(execStr)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *RoomRepository) CancleBook(d model.RoomModel) error {
+	db, err := handler.Init_DB()
+	if err != nil {
+		return err
+	}
+	defer handler.Close_DB(db)
+	// execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s', @ReserveDate = N'%v', @ReserveStartTime = N'%v',@ReserveEndTime =N'%v',@RoomNo =N'%s'", "CREATE", d.ReserveDate, d.ReserveStartTime, d.ReserveEndTime, d.RoomNo)
+	execStr := fmt.Sprintf("exec SP_RoomBookingManagement @Process = N'%s',@id=N'%v'", "CREATE", d.Id)
+	_, err = db.Exec(execStr)
+	if err != nil {
+		return err
+	}
+	return nil
+}
