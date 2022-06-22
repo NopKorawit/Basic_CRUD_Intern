@@ -7,7 +7,7 @@ export const CUSTOMERS: Customer[] = [
     lastName: 'Thanapat',
     //dateOfBirth: 1065092484806,
     address: 'home',
-    delFlag: false,
+    delFlag: 0,
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const CUSTOMERS: Customer[] = [
     lastName: 'Korawit',
     //dateOfBirth: 1655092484806,
     address: 'home',
-    delFlag: false,
+    delFlag: 0,
   },
   {
     id: 3,
@@ -23,6 +23,6 @@ export const CUSTOMERS: Customer[] = [
     lastName: 'Ball',
     //dateOfBirth: 1275092484806,
     address: 'Thaibev',
-    delFlag: false,
+    delFlag: 0,
   },
 ];

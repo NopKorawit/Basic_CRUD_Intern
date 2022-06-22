@@ -12,7 +12,7 @@ export class CustomerService {
   subscribeInstant: any;
   constructor(private http: HttpClient) {}
 
-  getCustomer(Id?: string): Observable<HttpResult<Customer[]>> {
+  getCustomer(Id?: string | number): Observable<HttpResult<Customer[]>> {
     const url = Id
       ? `${environment.baseApi}/customer/${Id}`
       : `${environment.baseApi}/customer`;

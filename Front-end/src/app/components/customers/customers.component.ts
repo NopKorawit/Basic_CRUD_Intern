@@ -1,28 +1,35 @@
-import { Component, OnInit, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Customer } from 'src/app/models/customer';
 import { CUSTOMERS } from 'src/app/data/mock-customer';
 import { map, Observable, startWith } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NgbDateAdapter, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbInputDatepickerConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerService } from '../../service/customer.service';
 
 @Component({
   selector: 'app-customers',
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.css'],
+  providers: [NgbInputDatepickerConfig],
 })
 export class CustomersComponent implements OnInit {
   customers = CUSTOMERS;
   errorMessage = '';
   errorClass = '';
 
-  getDateString(dateOfBirth: Date) {
-    const result = new Date(dateOfBirth).toLocaleDateString('th');
+  getDateString(birthday: Date) {
+    const result = new Date(birthday).toLocaleDateString('th');
     return result;
   }
+  calString(dateOfBirth: string) {
+    const now = Date.now();
+    const dob = new Date(dateOfBirth).getTime();
+    const timeDiff = Math.abs(now - dob);
+    const result = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
 
-  calculateAge(dateOfBirth: Date) {
-    const dob = dateOfBirth.getTime();
+    return result;
+  }
+  calculateAge(dob: number) {
     const now = Date.now();
     const timeDiff = Math.abs(now - dob);
     const result = Math.floor(timeDiff / (1000 * 3600 * 24) / 365);
@@ -32,22 +39,33 @@ export class CustomersComponent implements OnInit {
   customerList: any;
   getCustomers() {
     this.service.getCustomer().subscribe((result) => {
-      this.customerList = result;
+      if (result.message === 'successful') {
+        this.customerList = result.data;
+      }
     });
   }
-  getCustomer(id: number) {
-    const result: Customer = this.customers[id];
+  getCustomer(id?: number | string) {
+    const result = this.service.getCustomer(id);
     return result;
   }
   closeResult = '';
   constructor(
     private modalService: NgbModal,
     private service: CustomerService,
-    private dateAdapter: NgbDateAdapter<string>
-  ) {}
-  open(content: any, customer?: Customer) {
-    if (customer) {
-      console.log(customer.id);
+
+    config: NgbInputDatepickerConfig
+  ) {
+    const now = new Date();
+    config.minDate = { year: 1980, month: 1, day: 1 };
+    config.maxDate = {
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getDay(),
+    };
+  }
+  open(content: any, id?: number) {
+    if (id) {
+      console.log(id);
     }
     this.modalService
       .open(content, {
@@ -64,7 +82,7 @@ export class CustomersComponent implements OnInit {
     this.getCustomers();
   }
   customerForm = new FormGroup({
-    id: new FormControl({ value: 1 }),
+    id: new FormControl(1),
     firstName: new FormControl(
       '',
       Validators.compose([Validators.required, Validators.minLength(4)])
@@ -73,41 +91,59 @@ export class CustomersComponent implements OnInit {
       '',
       Validators.compose([Validators.required, Validators.minLength(4)])
     ),
-    dateOfBirth: new FormControl('', Validators.required),
+    birthday: new FormControl('', Validators.required),
     address: new FormControl('', Validators.required),
     //  age: new FormControl()
   });
   saveResponse: any;
+  tempData: Customer = {
+    firstName: '',
+    lastName: '',
+    birthday: '',
+    address: '',
+  };
   saveCustomer() {
-    console.log(this.customerForm.getRawValue());
-    // console.log(
-    //   'Age :' +
-    //     this.calculateAge(this.customerForm.getRawValue().dateOfBirth) +
-    //     'ปี'
-    // );
-
     if (this.customerForm.valid) {
-      this.service
-        .createCustomer(this.customerForm.getRawValue())
-        .subscribe((result) => {
-          this.saveResponse = result;
-          if (this.saveResponse.result == 'pass') {
-            this.errorMessage = 'Saved';
-            this.errorClass = 'success';
-          } else {
-            this.errorMessage = 'Failed to save';
-          }
-        });
+      this.tempData = this.customerForm.getRawValue();
+      this.tempData.birthday = new Date(
+        `${this.customerForm.get('birthday')?.value.year}-${
+          this.customerForm.get('birthday')?.value.month
+        }-${this.customerForm.get('birthday')?.value.day}`
+      ).toISOString();
+
+      this.service.createCustomer(this.tempData).subscribe((result) => {
+        this.saveResponse = result;
+        if (this.saveResponse.result == 'pass') {
+          this.errorMessage = 'Saved';
+          this.errorClass = 'success';
+          this.modalService.dismissAll();
+        } else {
+          this.errorMessage = 'Failed to save';
+        }
+      });
+      console.log(this.tempData);
     }
   }
 
   // get age() {
-  //   return this.calculateAge(this.customerForm.getRawValue().dateOfBirth);
+  //   return this.calculateAge(this.customerForm.getRawValue().birthday);
   // }
-  loadEditData(id: any) {
-    console.log(id);
+  get age() {
+    return this.calculateAge(
+      new Date(
+        `${this.customerForm.get('birthday')?.value.year}-${
+          this.customerForm.get('birthday')?.value.month
+        }-${this.customerForm.get('birthday')?.value.day}`
+      ).getTime()
+    );
   }
-  functionEdit(id: any) {
+  editData: any;
+  loadEditData(id: number) {
+    this.service.getCustomer(id).subscribe((result) => {
+      this.editData = result;
+    });
+  }
+  functionEdit(id: number) {
     this.loadEditData(id);
   }
 }

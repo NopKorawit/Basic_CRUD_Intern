@@ -27,16 +27,16 @@
             <td>
               <div class="input-group mx-auto">
                 <input
-                  id="dateOfBirth"
+                  id="birthday"
                   class="form-control"
-                  name="dp"
+                  name="d"
                   ngbDatepicker
-                  #dp="ngbDatepicker"
-                  formControlName="dateOfBirth"
+                  #d="ngbDatepicker"
+                  formControlName="birthday"
                 />
                 <button
-                  class="btn btn-outline-secondary calendar"
-                  (click)="dp.toggle()"
+                  class="btn btn-outline-secondary bi bi-calendar"
+                  (click)="d.toggle()"
                   type="button"
                 ></button>
               </div>
@@ -46,7 +46,7 @@
             <td>อายุ</td>
             <td>
               <span>
-                <!-- {{ age }} -->
+                {{ age }}
                 ปี</span
               >
             </td>
@@ -103,16 +103,16 @@
     </thead>
     <tbody>
       <tr *ngFor="let customer of customerList">
-        <td scope="row" class="text-end">{{ customer.id }}</td>
+        <td scope="row" class="text-end">{{ customer.Id }}</td>
         <td scope="row">{{ customer.firstName }} {{ customer.lastName }}</td>
         <td scope="row">{{ customer.address }}</td>
-        <td scope="row">{{ getDateString(customer.dateOfBirth) }}</td>
-        <td scope="row">{{ calculateAge(customer.dateOfBirth) }}</td>
+        <td scope="row">{{ getDateString(customer.birthday) }}</td>
+        <td scope="row">{{ calString(customer.birthday) }}</td>
         <td>
           <button
             type="button"
             class="btn btn-primary"
-            (click)="open(content, getCustomer(customer.id - 1))"
+            (click)="functionEdit(customer.Id)"
           >
             View
           </button>
